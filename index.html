@@ -1,38 +1,70 @@
 <!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>Call Leo: demo assistant</title>
+<title>Call Leo · Virtual Assistant, Austin AI Marketing (demo)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
-*{box-sizing:border-box}html,body{margin:0;height:100%;background:#000;color:#fff;font-family:system-ui,-apple-system,sans-serif;overflow:hidden}
-.screen{position:fixed;inset:0;display:none;flex-direction:column;align-items:center;justify-content:center;text-align:center;background:radial-gradient(circle at 50% 30%,#1e3a5f,#05070d)}
-.screen.on{display:flex}.big{font-size:34px;font-weight:600;margin:12px 0 4px}.sub{color:#9fb0cc}
-.avatarSm{width:120px;height:120px;border-radius:50%;background:linear-gradient(135deg,#f59e0b,#b45309);display:flex;align-items:center;justify-content:center;font-size:54px}
-.pulse{animation:p 1.4s infinite}@keyframes p{0%{box-shadow:0 0 0 0 #22c55e88}100%{box-shadow:0 0 0 40px #22c55e00}}
-.btn{width:64px;height:64px;border-radius:50%;border:0;font-size:26px;cursor:pointer;margin:0 10px;color:#fff;background:#ffffff26;backdrop-filter:blur(8px)}
-.btn.red{background:#ef4444}.btn.green{background:#22c55e}.btn.off{background:#fff;color:#111}
+:root{--navy:#0a1630;--navy2:#10224a;--white:#f5f7fb;--gold:#e0a526;--muted:#9fb0cf}
+*{box-sizing:border-box}html,body{margin:0;height:100%;background:#040812;color:var(--white);font-family:Inter,system-ui,sans-serif;overflow:hidden;-webkit-font-smoothing:antialiased}
+.screen{position:fixed;inset:0;display:none;flex-direction:column;align-items:center;justify-content:center;text-align:center;background:radial-gradient(120% 90% at 50% 20%,#13274f 0%,#081227 55%,#040812 100%)}
+.screen.on{display:flex}
+.portrait{width:132px;height:132px;border-radius:50%;background:var(--poster,none) center 22%/cover,#13274f;border:2px solid #ffffff30;box-shadow:0 10px 40px #0008}
+.ringing .portrait{animation:ring 1.6s infinite}@keyframes ring{0%{box-shadow:0 0 0 0 #e0a52666}100%{box-shadow:0 0 0 34px #e0a52600}}
+.name{font-size:30px;font-weight:600;margin:16px 0 2px;letter-spacing:-.3px}.sub{color:var(--muted);font-size:14px}
+.note{max-width:360px;font-size:13px;color:var(--muted);line-height:1.5;margin:14px 0 22px}
+.btn{width:60px;height:60px;border-radius:50%;border:0;cursor:pointer;margin:0 9px;color:#fff;background:#ffffff1f;backdrop-filter:blur(10px);display:inline-flex;align-items:center;justify-content:center;transition:background .2s}
+.btn svg{width:26px;height:26px;fill:currentColor}.btn:hover{background:#ffffff33}.btn.red{background:#d93a3a}.btn.green{background:#1fa463}.btn.off{background:#f5f7fb;color:#0a1630}
 #call{display:none;position:fixed;inset:0}#call.on{display:block}
-#leo,#studio{position:absolute;inset:0;width:100%;height:100%}#studio canvas{display:block}body.three #leo{display:none}
-#me{position:absolute;top:16px;right:16px;width:28vw;max-width:180px;aspect-ratio:3/4;object-fit:cover;border-radius:14px;border:2px solid #ffffff55;transform:scaleX(-1);background:#222;z-index:3}
-#top{position:absolute;top:16px;left:16px;z-index:3;text-shadow:0 1px 4px #000}#top b{font-size:20px}
-.badge{display:inline-block;font-size:11px;background:#f59e0b;color:#111;padding:2px 8px;border-radius:99px;margin-top:4px;font-weight:700}
-#caps{position:absolute;left:50%;transform:translateX(-50%);bottom:150px;width:min(92%,560px);z-index:3}
-.cap{background:#000b;padding:6px 10px;border-radius:10px;margin-top:4px;font-size:14px}.cap.you{color:#93c5fd}.cap.leo{color:#fde68a}
-#ctrl{position:absolute;bottom:64px;left:0;right:0;display:flex;justify-content:center;z-index:3}
-#typeRow{position:absolute;bottom:14px;left:50%;transform:translateX(-50%);width:min(92%,520px);display:flex;gap:6px;z-index:3}
-#typeRow input{flex:1;padding:10px;border-radius:99px;border:0;background:#ffffffe6;color:#111;font:inherit}#typeRow button{border:0;border-radius:99px;padding:0 16px;background:#3b82f6;color:#fff;font-weight:600}
-#llm{position:absolute;top:70px;left:16px;z-index:3;font-size:12px;color:#cbd5e1}
-footer{position:fixed;bottom:0;width:100%;text-align:center;font-size:11px;color:#9fb0cc;padding:2px;z-index:4;pointer-events:none}
-#status{font-size:12px;color:#cbd5e1}
+#studio,#lite{position:absolute;inset:0}#studio canvas{display:block}
+#lite{display:none;background:radial-gradient(100% 80% at 50% 30%,#13274f,#040812)}body.lite #lite{display:block}
+#lite .panel{position:absolute;left:50%;top:7%;transform:translateX(-50%);width:min(94vw,900px);aspect-ratio:3/1;border-radius:6px;overflow:hidden;box-shadow:0 20px 60px #000a}
+#lite .panel video{width:100%;height:100%;object-fit:cover}
+#lite .leo{position:absolute;left:50%;bottom:0;transform:translateX(-50%);height:66%;aspect-ratio:4/3}
+#lite .leo{overflow:hidden;-webkit-mask-image:radial-gradient(60% 80% at 50% 62%,#000 55%,transparent 100%);mask-image:radial-gradient(60% 80% at 50% 62%,#000 55%,transparent 100%)}#lite .leo video{position:absolute;top:0;left:0;width:200%;height:100%;object-fit:fill;transition:opacity .25s}
+#self{position:absolute;top:18px;right:18px;width:clamp(96px,16vw,168px);aspect-ratio:3/4;border-radius:14px;background:linear-gradient(160deg,#1a2a4d,#0b1530);border:1px solid #ffffff2a;display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:5;color:var(--muted);font-size:12px;gap:8px;box-shadow:0 8px 30px #0007}
+#self svg{width:40%;fill:#ffffff40}
+#bug{position:absolute;top:18px;left:18px;z-index:5;display:flex;gap:8px;align-items:center}
+.live{background:#d93a3a;color:#fff;font-weight:700;font-size:12px;letter-spacing:2px;padding:4px 9px;border-radius:3px}
+.clock{background:#0a1630cc;font-size:13px;padding:4px 9px;border-radius:3px;font-variant-numeric:tabular-nums}
+.demo{background:#ffffff14;font-size:11px;padding:4px 9px;border-radius:3px;color:#dbe3f2;letter-spacing:.5px}
+#voicePill{position:absolute;top:52px;left:18px;z-index:5;font-size:12px;color:#dbe3f2;background:#0a1630b3;padding:5px 10px;border-radius:99px;display:flex;align-items:center;gap:8px}
+#voicePill i{display:block;width:90px;height:4px;background:#ffffff22;border-radius:4px;overflow:hidden}#voicePill b{display:block;height:100%;width:0;background:var(--gold);transition:width .3s}
+#lt{position:absolute;left:4vw;bottom:calc(64px + 118px);width:min(64vw,640px);z-index:5;pointer-events:none}
+#ticker{position:absolute;left:0;right:0;bottom:0;height:min(4.4vw,40px);min-height:30px;width:100%;object-fit:cover;object-position:left;z-index:5}
+#caps{position:absolute;left:50%;transform:translateX(-50%);bottom:calc(min(4.4vw,40px) + 96px);width:min(90%,620px);z-index:6;text-align:center}
+.cap{display:inline-block;background:#050b18d9;padding:7px 12px;border-radius:6px;margin-top:5px;font-size:15px;line-height:1.4;max-width:100%}.cap.you{color:#bcd2ff}.cap.leo{color:#fff}
+.cap b{font-weight:600;color:var(--gold);margin-right:6px}
+#ctrl{position:absolute;bottom:calc(min(4.4vw,40px) + 18px);right:22px;display:flex;z-index:6}
+#typeRow{position:absolute;bottom:calc(min(4.4vw,40px) + 26px);left:4vw;width:min(46vw,420px);display:flex;gap:6px;z-index:6}
+#typeRow input{flex:1;padding:11px 14px;border-radius:99px;border:1px solid #ffffff2a;background:#0a1630cc;color:#fff;font:inherit;font-size:14px}#typeRow button{border:0;border-radius:99px;padding:0 16px;background:var(--white);color:var(--navy);font-weight:600;font-family:inherit}
+#status{position:absolute;top:84px;left:18px;font-size:12px;color:#cbd5e1;z-index:5}
+footer{position:fixed;bottom:2px;right:8px;font-size:10px;color:#9fb0cfaa;z-index:7;pointer-events:none}
+#call.on~footer{bottom:auto;top:4px;right:50%;transform:translateX(50%)}
+@media(max-width:640px){#typeRow{left:3vw;width:94vw;bottom:calc(min(4.4vw,40px) + 92px)}#ctrl{right:50%;transform:translateX(50%)}#caps{bottom:calc(min(4.4vw,40px) + 150px)}#lt{bottom:calc(64px + 190px)}}
 </style></head><body>
-<div id="start" class="screen on"><div class="avatarSm">🦁</div><div class="big">Leo</div><div class="sub">Demo virtual assistant · Austin AI Marketing · live from the 3D studio</div>
-<p class="sub" style="max-width:340px;font-size:14px">This is a demo assistant that runs entirely in your browser. You're talking to software, not a person, and nothing is recorded or sent anywhere.</p>
-<button class="btn green" id="callBtn" title="Call">📞</button><p class="sub" style="font-size:12px">Allow camera and microphone when asked. Voice works best in Chrome or Edge.</p></div>
-<div id="ring" class="screen"><div class="avatarSm pulse">🦁</div><div class="big">Leo</div><div class="sub" id="ringTxt">Calling…</div><br><button class="btn red" id="cancelBtn">✕</button></div>
-<div id="call"><div id="studio"></div><canvas id="leo"></canvas><video id="me" autoplay playsinline muted></video>
-<div id="top"><b>Leo</b> · <span id="timer">00:00</span><br><span class="badge">DEMO ASSISTANT · RUNS IN YOUR BROWSER</span><div id="status"></div></div>
-<label id="llm"><input type="checkbox" id="llmToggle"> Smarter replies (optional WebLLM, ~1 GB download, needs WebGPU)</label>
-<div id="caps"></div>
-<div id="ctrl"><button class="btn" id="muteBtn" title="Mute">🎙️</button><button class="btn" id="camBtn" title="Camera">📷</button><button class="btn red" id="endBtn" title="End">📞</button></div>
-<form id="typeRow"><input id="typed" placeholder="Or type to Leo…" autocomplete="off"><button>Send</button></form></div>
-<div id="ended" class="screen"><div class="avatarSm">🦁</div><div class="big">Call ended</div><div class="sub" id="endTxt"></div><br><button class="btn green" id="againBtn">📞</button></div>
+<div id="start" class="screen on"><div class="portrait"></div><div class="name">Leo</div><div class="sub">Virtual Assistant · Austin AI Marketing</div>
+<p class="note">This is a demo assistant that runs entirely in your browser. You're talking to software, not a person. Your camera is never used. The microphone is only used for speech recognition while the call is on.</p>
+<button class="btn green" id="callBtn" title="Call Leo"><svg viewBox="0 0 24 24"><path d="M6.6 10.8a15.1 15.1 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.25 11.4 11.4 0 0 0 3.6.57 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.25.2 2.45.57 3.57a1 1 0 0 1-.25 1z"/></svg></button>
+<p class="sub" style="font-size:12px;margin-top:14px">Voice works best in Chrome or Edge. First call downloads Leo's voice once (cached afterwards).</p></div>
+<div id="ring" class="screen ringing"><div class="portrait"></div><div class="name">Leo</div><div class="sub" id="ringTxt">Calling…</div><br><button class="btn red" id="cancelBtn" title="Cancel"><svg viewBox="0 0 24 24"><path d="M12 9c-1.6 0-3.15.25-4.6.72v3.1a1 1 0 0 1-.56.9c-.98.49-1.87 1.12-2.66 1.85a1 1 0 0 1-1.4 0L.29 13.08a1 1 0 0 1 0-1.41C3.34 8.78 7.46 7 12 7s8.66 1.78 11.71 4.67a1 1 0 0 1 0 1.41l-2.48 2.49a1 1 0 0 1-1.4 0 11.3 11.3 0 0 0-2.67-1.85 1 1 0 0 1-.56-.9v-3.1C15.15 9.25 13.6 9 12 9z"/></svg></button></div>
+<div id="call">
+ <div id="studio"></div>
+ <div id="lite"><div class="panel"><video id="litePanel" muted loop playsinline></video></div><div class="leo"><video id="liteIdle" data-media="leo-idle.mp4" muted loop playsinline></video><video id="liteTalk" data-media="leo-talk.mp4" muted loop playsinline style="opacity:0"></video></div></div>
+ <div id="bug"><span class="live">LIVE</span><span class="clock" id="timer">00:00</span><span class="demo">DEMO ASSISTANT · RUNS IN YOUR BROWSER</span></div>
+ <div id="voicePill"><span id="voiceTxt">Loading Leo's voice…</span><i><b id="voiceBar"></b></i></div>
+ <div id="status"></div>
+ <div id="self" title="Camera is off in this demo"><svg viewBox="0 0 24 24"><path d="M12 12a5 5 0 1 0 0-10 5 5 0 0 0 0 10zm0 2c-4.4 0-9 2.2-9 5v3h18v-3c0-2.8-4.6-5-9-5z"/></svg><span>You · camera off</span></div>
+ <video id="lt" data-media="lower-third.webm" muted playsinline></video>
+ <div id="caps"></div>
+ <form id="typeRow"><input id="typed" placeholder="Type to Leo…" autocomplete="off"><button>Send</button></form>
+ <div id="ctrl"><button class="btn" id="muteBtn" title="Mute microphone"><svg viewBox="0 0 24 24"><path d="M12 14a3 3 0 0 0 3-3V5a3 3 0 0 0-6 0v6a3 3 0 0 0 3 3zm5-3a5 5 0 0 1-10 0H5a7 7 0 0 0 6 6.92V21h2v-3.08A7 7 0 0 0 19 11z"/></svg></button><button class="btn red" id="endBtn" title="End call"><svg viewBox="0 0 24 24"><path d="M12 9c-1.6 0-3.15.25-4.6.72v3.1a1 1 0 0 1-.56.9c-.98.49-1.87 1.12-2.66 1.85a1 1 0 0 1-1.4 0L.29 13.08a1 1 0 0 1 0-1.41C3.34 8.78 7.46 7 12 7s8.66 1.78 11.71 4.67a1 1 0 0 1 0 1.41l-2.48 2.49a1 1 0 0 1-1.4 0 11.3 11.3 0 0 0-2.67-1.85 1 1 0 0 1-.56-.9v-3.1C15.15 9.25 13.6 9 12 9z"/></svg></button></div>
+ <video id="ticker" data-media="ticker.mp4" muted loop playsinline></video>
+</div>
+<div id="ended" class="screen"><div class="portrait"></div><div class="name">Call ended</div><div class="sub" id="endTxt"></div><br><button class="btn green" id="againBtn" title="Call again"><svg viewBox="0 0 24 24"><path d="M6.6 10.8a15.1 15.1 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.25 11.4 11.4 0 0 0 3.6.57 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.25.2 2.45.57 3.57a1 1 0 0 1-.25 1z"/></svg></button></div>
 <footer>Demo by Austin AI Marketing · austinaimarketingco.com</footer>
 <script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"}}</script>
-<script type="module" src="studio.js"></script><script src="brain.js"></script><script src="app.js"></script></body></html>
+<script>
+// Media ships as one base64 bundle (the GitHub connector used to publish this repo only commits text files).
+window.leoMedia=fetch('media/bundle.json').then(r=>r.json()).then(j=>{const m={};for(const[k,v]of Object.entries(j)){const b=Uint8Array.from(atob(v.data),c=>c.charCodeAt(0));m[k]=URL.createObjectURL(new Blob([b],{type:v.type}))}
+ window.leoMediaMap=m;document.querySelectorAll('[data-media]').forEach(e=>{e.src=m[e.dataset.media]});document.documentElement.style.setProperty('--poster','url('+m['leo-poster.jpg']+')');return m});
+</script>
+<script src="brain.js"></script><script type="module" src="studio.js"></script><script type="module" src="app.js"></script>
+</body></html>
