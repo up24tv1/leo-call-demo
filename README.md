@@ -1,23 +1,18 @@
-# Call Leo: video call demo
+# Call Leo: virtual on-air assistant (demo)
 
-A one-on-one, FaceTime-style video call with **Leo**, a demo virtual assistant for Austin AI Marketing that runs entirely in your browser.
+**Live:** https://up24tv1.github.io/leo-call-demo/ · **Spec for humans & AI agents:** [SPEC.md](SPEC.md)
 
-- **Your side:** your webcam is shown in a picture-in-picture tile, with buttons for mute, camera on/off and end call.
-- **Leo's side, a 3D studio (three.js r160, free CDN):** a broadcast/creator set with a warm key spotlight, magenta and cyan rim lights, neon LED strips, an ON AIR sign, soft additive light cones, a reflective floor (Reflector), floating dust particles, bloom, and a shallow depth-of-field (BokehPass) for a bokeh feel. The camera drifts slowly and follows your mouse for parallax. Leo's 3D bust breathes, blinks, sways his head while talking, and his mouth syncs to speech.
-- **Lightweight fallback:** devices with 2 or fewer CPU cores, WebGL failures, or `?lite=1` use a 2D canvas avatar that also breathes, blinks and lip-syncs.
-- **Conversation:** your speech is recognized with the Web Speech API (Chrome or Edge), or you can type in the text box. Leo answers out loud with speechSynthesis, and live captions show both sides.
-- **Brain:** rule-based answers in `brain.js` cover services, pricing (pages from $497), the website, time and date, and small talk, with a fallback. There is an optional **WebLLM** toggle (Qwen2.5-0.5B, about 1 GB, needs WebGPU), loaded free from a CDN. It is off by default.
-- **Call flow:** calling and connecting screens, a call timer and a call-ended screen.
+A FaceTime-style call with **Leo**, a photoreal virtual news anchor for Austin AI Marketing, live from a broadcast news studio rendered in your browser.
 
-No API keys and no servers. Nothing is recorded or sent anywhere, except that Chrome's speech recognition uses Google's own free service.
+- **Leo:** photoreal video loops (idle and talking) generated from a portrait and animated with LivePortrait. They crossfade while he speaks. A 3D bust and a lite mode are the fallbacks.
+- **Voice:** a natural neural voice (Kokoro-82M, `am_michael`) running in the browser with WebGPU or WASM, with a lip-sync pulse driven by the real audio amplitude. If it can't load, it falls back to the system voice.
+- **Studio:** three.js with PBR materials, a curved LED wall that changes with the topic (Remotion-rendered motion graphics), side monitors, an anchor desk, key/fill/back lighting, a reflective floor, eased camera moves, a lower third and a ticker.
+- **Talk:** speech recognition (Chrome or Edge) or typing. Leo never hears himself, ignores duplicates, and doesn't repeat himself.
+- **Privacy:** **no camera access** in this build. The microphone is only used during the call for speech recognition.
 
-## Run it
-Camera and mic need HTTPS. Turn on GitHub Pages under Settings → Pages → Deploy from a branch → `main` / root, then open `https://up24tv1.github.io/leo-call-demo/`.
+Free and open source, with no API keys and no servers. Hosted on GitHub Pages. `?lite=1` gives a lightweight version.
 
-## Connecting a real phone line (not included)
-A real "Leo" phone number needs paid telephony, for example:
-1. **Twilio Voice:** buy a number (about $1–2 a month plus per-minute charges) and use the Twilio Voice JS SDK (WebRTC) in this page so the browser can place or receive calls. A small server (for example a Vercel function) has to issue Access Tokens and serve TwiML.
-2. Pipe call audio to speech-to-text, the brain, and text-to-speech (Twilio `<Gather>`/`<Say>` or Media Streams), or hand off to a human.
-3. Alternatives: Vonage, Telnyx, or SignalWire with similar WebRTC SDKs.
+## Phone line (not included)
+A real Leo phone number needs telephony: a SIP number into Asterisk or Pipecat (open source), or Twilio Voice with its WebRTC client (paid per minute) plus a small token server. See SPEC.md §11.
 
 Demo by Austin AI Marketing, austinaimarketingco.com
