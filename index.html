@@ -1,0 +1,38 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Call Leo: demo assistant</title>
+<style>
+*{box-sizing:border-box}html,body{margin:0;height:100%;background:#000;color:#fff;font-family:system-ui,-apple-system,sans-serif;overflow:hidden}
+.screen{position:fixed;inset:0;display:none;flex-direction:column;align-items:center;justify-content:center;text-align:center;background:radial-gradient(circle at 50% 30%,#1e3a5f,#05070d)}
+.screen.on{display:flex}.big{font-size:34px;font-weight:600;margin:12px 0 4px}.sub{color:#9fb0cc}
+.avatarSm{width:120px;height:120px;border-radius:50%;background:linear-gradient(135deg,#f59e0b,#b45309);display:flex;align-items:center;justify-content:center;font-size:54px}
+.pulse{animation:p 1.4s infinite}@keyframes p{0%{box-shadow:0 0 0 0 #22c55e88}100%{box-shadow:0 0 0 40px #22c55e00}}
+.btn{width:64px;height:64px;border-radius:50%;border:0;font-size:26px;cursor:pointer;margin:0 10px;color:#fff;background:#ffffff26;backdrop-filter:blur(8px)}
+.btn.red{background:#ef4444}.btn.green{background:#22c55e}.btn.off{background:#fff;color:#111}
+#call{display:none;position:fixed;inset:0}#call.on{display:block}
+#leo,#studio{position:absolute;inset:0;width:100%;height:100%}#studio canvas{display:block}body.three #leo{display:none}
+#me{position:absolute;top:16px;right:16px;width:28vw;max-width:180px;aspect-ratio:3/4;object-fit:cover;border-radius:14px;border:2px solid #ffffff55;transform:scaleX(-1);background:#222;z-index:3}
+#top{position:absolute;top:16px;left:16px;z-index:3;text-shadow:0 1px 4px #000}#top b{font-size:20px}
+.badge{display:inline-block;font-size:11px;background:#f59e0b;color:#111;padding:2px 8px;border-radius:99px;margin-top:4px;font-weight:700}
+#caps{position:absolute;left:50%;transform:translateX(-50%);bottom:150px;width:min(92%,560px);z-index:3}
+.cap{background:#000b;padding:6px 10px;border-radius:10px;margin-top:4px;font-size:14px}.cap.you{color:#93c5fd}.cap.leo{color:#fde68a}
+#ctrl{position:absolute;bottom:64px;left:0;right:0;display:flex;justify-content:center;z-index:3}
+#typeRow{position:absolute;bottom:14px;left:50%;transform:translateX(-50%);width:min(92%,520px);display:flex;gap:6px;z-index:3}
+#typeRow input{flex:1;padding:10px;border-radius:99px;border:0;background:#ffffffe6;color:#111;font:inherit}#typeRow button{border:0;border-radius:99px;padding:0 16px;background:#3b82f6;color:#fff;font-weight:600}
+#llm{position:absolute;top:70px;left:16px;z-index:3;font-size:12px;color:#cbd5e1}
+footer{position:fixed;bottom:0;width:100%;text-align:center;font-size:11px;color:#9fb0cc;padding:2px;z-index:4;pointer-events:none}
+#status{font-size:12px;color:#cbd5e1}
+</style></head><body>
+<div id="start" class="screen on"><div class="avatarSm">🦁</div><div class="big">Leo</div><div class="sub">Demo virtual assistant · Austin AI Marketing · live from the 3D studio</div>
+<p class="sub" style="max-width:340px;font-size:14px">This is a demo assistant that runs entirely in your browser. You're talking to software, not a person, and nothing is recorded or sent anywhere.</p>
+<button class="btn green" id="callBtn" title="Call">📞</button><p class="sub" style="font-size:12px">Allow camera and microphone when asked. Voice works best in Chrome or Edge.</p></div>
+<div id="ring" class="screen"><div class="avatarSm pulse">🦁</div><div class="big">Leo</div><div class="sub" id="ringTxt">Calling…</div><br><button class="btn red" id="cancelBtn">✕</button></div>
+<div id="call"><div id="studio"></div><canvas id="leo"></canvas><video id="me" autoplay playsinline muted></video>
+<div id="top"><b>Leo</b> · <span id="timer">00:00</span><br><span class="badge">DEMO ASSISTANT · RUNS IN YOUR BROWSER</span><div id="status"></div></div>
+<label id="llm"><input type="checkbox" id="llmToggle"> Smarter replies (optional WebLLM, ~1 GB download, needs WebGPU)</label>
+<div id="caps"></div>
+<div id="ctrl"><button class="btn" id="muteBtn" title="Mute">🎙️</button><button class="btn" id="camBtn" title="Camera">📷</button><button class="btn red" id="endBtn" title="End">📞</button></div>
+<form id="typeRow"><input id="typed" placeholder="Or type to Leo…" autocomplete="off"><button>Send</button></form></div>
+<div id="ended" class="screen"><div class="avatarSm">🦁</div><div class="big">Call ended</div><div class="sub" id="endTxt"></div><br><button class="btn green" id="againBtn">📞</button></div>
+<footer>Demo by Austin AI Marketing · austinaimarketingco.com</footer>
+<script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"}}</script>
+<script type="module" src="studio.js"></script><script src="brain.js"></script><script src="app.js"></script></body></html>
